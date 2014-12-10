@@ -10,16 +10,16 @@
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class AGPPC {
 	private ArrayList<Cavalo> popCavalos = new ArrayList<>();
 	private Tabuleiro tabuleiroAG = new Tabuleiro();
 	//private Casa casaAG = new Casa();
 	private int tamPop = 200;
-	private double probMutacao = 0.1; //10%
+	private double probMutacao = 0.5; //10%
 	private double probRecombinacao = 0.9; //90%
 	private boolean verificaRecombinacao = false;
+	private int qtdFilhos = (int)(tamPop*0.4);
 	//construtor inicia população de cavalos;
 	AGPPC()
 	{
@@ -345,6 +345,9 @@ public class AGPPC {
 		}
         //ordena a população auxiliar
         Arrays.sort(populacaoAux, Cavalo.IndFitness);
+        //seleciona os 2 melhores da população auxiliar
+        //pais[0] = populacaoAux[0];
+        //pais[1] = populacaoAux[1];
         pais[0] = populacaoAux[populacaoAux.length-1];
         pais[1] = populacaoAux[populacaoAux.length-2];
 
@@ -355,7 +358,6 @@ public class AGPPC {
 	{
 		Cavalo[] pais = new Cavalo[2];
 		Cavalo filho = new Cavalo();
-		int qtdFilhos= 25;
 		int posicao = getPopCavalos().size()/3; //posição a ser introduzido o filho gerado
 		
 		for(int i = 0; i < qtdFilhos; i++)			
@@ -375,6 +377,8 @@ public class AGPPC {
 				verificaRecombinacao=false;
 			}
 		}
+		//elitismo
+		getPopCavalos().set(0, getMelhorIndividuo());
 	}
 	//Imprime a população de cavalos
 	public void printPopCavalos()
@@ -401,11 +405,15 @@ public class AGPPC {
 	public Cavalo getMelhorIndividuo()
 	{
 		Cavalo[] popAux = new Cavalo[getPopCavalos().size()]; 
+		//ArrayList<Cavalo> popAux = new ArrayList<>();
 		for (int i = 0; i < popAux.length; i++)
 			popAux[i] = getPopCavalos().get(i);			
+		//popAux = getPopCavalos();
 		Arrays.sort(popAux, Cavalo.IndFitness);
+		//Collections.sort(popAux, Cavalo.IndFitness);
 		return popAux[popAux.length-1];
-		
+		//return getPopCavalos().get(getPopCavalos().size()-1);
+		//return popAux.get(popAux.size()-1);
 	}
 		
 	public int getTamPop() {
